@@ -15,51 +15,57 @@ interface Events {
     [event: string]: Callback[]
 }
 
-module.exports = class EventBus implements IEventBus {
-    private events: Events = {}
-    constructor() {
+function subscribe(event: string, callback: Callback): boolean {
+    if (this.events[event]) {
+        this.events[event].push(callback)
+    } else {
+        this.events[event] = [callback]
+    }
+    return true;
+}
 
-    }
-    public subscribe(event: string, callback: Callback): boolean {
-        if (this.events[event]) {
-            this.events[event].push(callback)
-        } else {
-            this.events[event] = [callback]
-        }
-        return true;
-    }
-    public unsubscribe(event: string, callback: Callback): boolean {
-        if (this.events[event]) {
-            this.events[event].forEach((myCallback, key) => {
-                if (myCallback === callback) {
-                    this.events[event].splice(key, 1)
-                } else {
-                    return false
-                }
-            })
-            return true
-        }
-    }
-    public unsubscribeAll(event: string): boolean {
-        if (this.events[event]) {
-            this.events[event] = null
-            return true
-        } else {
-            return false
-        }
-    }
-    public clear(): boolean {
-        this.events = {}
+function unsubscribe(event: string, callback: Callback): boolean {
+    if (this.events[event]) {
+        this.events[event].forEach((myCallback: Callback, key: number) => {
+            if (myCallback === callback) {
+                this.events[event].splice(key, 1)
+            } else {
+                return false
+            }
+        })
         return true
     }
-    public notify<T>(event: string, ...payload: T[]) {
-        if (this.events[event]) {
-            this.events[event].forEach((callback) => {
-                callback.apply(null, payload)
-            })
-        } else {
-            console.error('该事件没有订阅')
-            return false
-        }
+}
+
+function unsubscribeAll(event: string): boolean {
+    if (this.events[event]) {
+        this.events[event] = null
+        return true
+    } else {
+        return false
     }
+}
+function notify<T>(event: string, ...payload: T[]) {
+    if (this.events[event]) {
+        this.events[event].forEach((callback: Callback) => {
+            callback.apply(null, payload)
+        })
+    } else {
+        console.error('该事件没有订阅')
+        return false
+    }
+}
+function clear(): boolean {
+    this.events = {}
+    return true
+}
+module.exports = class EventBus implements IEventBus {
+    // 外部无法直接修改events
+    private events: Events = {}
+    // 接口API对外开放
+    public subscribe = subscribe
+    public unsubscribe = unsubscribe
+    public unsubscribeAll = unsubscribeAll
+    public clear = clear
+    public notify = notify
 }
