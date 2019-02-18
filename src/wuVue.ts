@@ -11,9 +11,6 @@ export interface IEventBus {
     notify: Notify;
     clear: Clear;
 }
-interface Events {
-    [event: string]: Callback[]
-}
 
 function subscribe(event: string, callback: Callback): boolean {
     if (this.events[event]) {
@@ -23,6 +20,7 @@ function subscribe(event: string, callback: Callback): boolean {
     }
     return true;
 }
+
 
 function unsubscribe(event: string, callback: Callback): boolean {
     if (this.events[event]) {
@@ -59,13 +57,44 @@ function clear(): boolean {
     this.events = {}
     return true
 }
-module.exports = class EventBus implements IEventBus {
-    // 外部无法直接修改events
-    private events: Events = {}
-    // 接口API对外开放
+
+class MyEvents {
+    protected events = {}
+}
+
+class MySubscribe extends MyEvents {
+    constructor() {
+        super()
+    }
     public subscribe = subscribe
+}
+
+class MyUnsubscribe extends MySubscribe {
+    constructor() {
+        super()
+    }
     public unsubscribe = unsubscribe
+}
+class MyUnsubscribeAll extends MyUnsubscribe {
+    constructor() {
+        super()
+    }
     public unsubscribeAll = unsubscribeAll
+}
+class MyClear extends MyUnsubscribeAll {
+    constructor() {
+        super()
+    }
     public clear = clear
+}
+class MyNotify extends MyClear {
+    constructor() {
+        super()
+    }
     public notify = notify
+}
+module.exports = class EventBus extends MyNotify implements IEventBus {
+   constructor() {
+       super()
+   }
 }
