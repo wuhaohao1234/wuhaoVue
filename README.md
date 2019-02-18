@@ -13,7 +13,7 @@
 
 ```
     import { IEventBus } from "./wuVue"; //引入类型声明
-    import { EventBus }  from './wuVue'  //引入
+    let EventBus = require("./wuVue")
 
     let eventBus: IEventBus = new EventBus()
     //订阅click事件
