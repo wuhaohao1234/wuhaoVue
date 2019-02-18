@@ -13,7 +13,15 @@
 
 ```
     import { IEventBus } from "./wuVue"; //引入类型声明
-    let EventBus = require("./wuVue")  //在es6中需修改src/wuVue.ts中的module.exports改为export
+    let EventBus = require("./wuVue")  //在vue中需修改src/wuVue.ts中的module.exports改为export
+
+    /*vue
+    export class EventBus extends MyNotify implements IEventBus {
+        constructor() {
+            super()
+        }
+    }
+    */
 
     let eventBus: IEventBus = new EventBus()
     //订阅click事件
