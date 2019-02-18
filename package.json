@@ -1,6 +1,6 @@
 {
   "name": "wuhaovue",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "全局事件订阅系统",
   "main": "index.js",
   "scripts": {

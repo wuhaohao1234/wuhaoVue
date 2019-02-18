@@ -21,7 +21,6 @@ function subscribe(event: string, callback: Callback): boolean {
     return true;
 }
 
-
 function unsubscribe(event: string, callback: Callback): boolean {
     if (this.events[event]) {
         this.events[event].forEach((myCallback: Callback, key: number) => {
