@@ -93,7 +93,7 @@ class MyNotify extends MyClear {
     public notify = notify
 }
 
-module.exports = class EventBus extends MyNotify implements IEventBus {
+module.exports =  class EventBus extends MyNotify implements IEventBus {
    constructor() {
        super()
    }
